@@ -1131,7 +1131,7 @@ def connect(use_gui=True, shadows=True, color=None, width=None, height=None, mp4
     CLIENTS[sim_id] = True if use_gui else None
     if use_gui:
         # p.COV_ENABLE_PLANAR_REFLECTION
-        disable_preview()
+        # disable_preview()
         p.configureDebugVisualizer(p.COV_ENABLE_TINY_RENDERER, False, physicsClientId=sim_id) # TODO: does this matter?
         p.configureDebugVisualizer(p.COV_ENABLE_SHADOWS, shadows, physicsClientId=sim_id)
         p.configureDebugVisualizer(p.COV_ENABLE_MOUSE_PICKING, False, physicsClientId=sim_id) # mouse moves meshes
@@ -5160,8 +5160,8 @@ def read_counter(debug):
 def read_button(debug):
     return read_counter(debug) % 2 == 1
 
-def add_text(text, position=unit_point(), color=BLACK, lifetime=None, parent=NULL_ID, parent_link=BASE_LINK):
-    return p.addUserDebugText(str(text), textPosition=position, textColorRGB=color[:3], # textSize=1,
+def add_text(text, position=unit_point(), color=BLACK, lifetime=None, parent=NULL_ID, parent_link=BASE_LINK, text_size=1):
+    return p.addUserDebugText(str(text), textPosition=position, textColorRGB=color[:3], textSize=text_size,
                               lifeTime=get_lifetime(lifetime), parentObjectUniqueId=parent, parentLinkIndex=parent_link,
                               physicsClientId=CLIENT)
 
@@ -5214,7 +5214,7 @@ def draw_link_name(body, link=BASE_LINK, position=Point(y=0.2)):
     return add_text(get_link_name(body, link), position=position,
                     parent=body, parent_link=link)
 
-def draw_pose(pose, length=0.1, d=3, **kwargs):
+def draw_pose(pose, length=0.1, d=3, label="", **kwargs):
     origin_world = tform_point(pose, np.zeros(3))
     handles = []
     for k in range(d):
@@ -5222,6 +5222,8 @@ def draw_pose(pose, length=0.1, d=3, **kwargs):
         axis[k] = 1
         axis_world = tform_point(pose, length*axis)
         handles.append(add_line(origin_world, axis_world, color=axis, **kwargs))
+    if label:
+        add_text(label, position=pose[0], color=BLACK, text_size=0.75, **kwargs)
     return handles
 
 def draw_global_system(length=1., **kwargs):

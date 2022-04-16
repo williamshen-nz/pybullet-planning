@@ -47,13 +47,14 @@ class BodyPose(object):
 
 class BodyGrasp(object):
     num = count()
-    def __init__(self, body, grasp_pose, approach_pose, robot, link):
+    def __init__(self, body, grasp_pose, approach_pose, robot, link, grasp_type="unknown"):
         self.body = body
         self.grasp_pose = grasp_pose
         self.approach_pose = approach_pose
         self.robot = robot
         self.link = link
         self.index = next(self.num)
+        self.grasp_type = grasp_type
     @property
     def value(self):
         return self.grasp_pose
