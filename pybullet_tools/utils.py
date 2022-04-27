@@ -1095,7 +1095,7 @@ class LockRenderer(Saver):
         if self.state != CLIENTS[self.client]:
            set_renderer(enable=self.state)
 
-def connect(use_gui=True, shadows=True, color=None, width=None, height=None, mp4=None, fps=120):
+def connect(use_gui=True, shadows=True, color=None, width=None, height=None, mp4=None, fps=120, preview=False):
     # Shared Memory: execute the physics simulation and rendering in a separate process
     # https://github.com/bulletphysics/bullet3/blob/master/examples/pybullet/examples/vrminitaur.py#L7
     # make sure to compile pybullet with PYBULLET_USE_NUMPY enabled
@@ -1131,7 +1131,8 @@ def connect(use_gui=True, shadows=True, color=None, width=None, height=None, mp4
     CLIENTS[sim_id] = True if use_gui else None
     if use_gui:
         # p.COV_ENABLE_PLANAR_REFLECTION
-        # disable_preview()
+        if not preview:
+            disable_preview()
         p.configureDebugVisualizer(p.COV_ENABLE_TINY_RENDERER, False, physicsClientId=sim_id) # TODO: does this matter?
         p.configureDebugVisualizer(p.COV_ENABLE_SHADOWS, shadows, physicsClientId=sim_id)
         p.configureDebugVisualizer(p.COV_ENABLE_MOUSE_PICKING, False, physicsClientId=sim_id) # mouse moves meshes
