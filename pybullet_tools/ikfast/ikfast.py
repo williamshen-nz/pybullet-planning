@@ -41,9 +41,16 @@ def is_ik_compiled(ikfast_info):
         return False
 
 
+def is_ikfast_imported(ikfast_info):
+    return get_module_name(ikfast_info) in sys.modules
+
+
 def check_ik_solver(ikfast_info):
-    print(ikfast_info)
+    # print(ikfast_info)
     try:
+        if is_ikfast_imported(ikfast_info):
+            # print("IKFast already imported")
+            return
         import_ikfast(ikfast_info)
         print('Using IKFast for inverse kinematics')
     except ImportError as e:
