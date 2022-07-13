@@ -3980,10 +3980,10 @@ def plan_direct_joint_motion(body, joints, end_conf, **kwargs):
 def check_initial_end(start_conf, end_conf, collision_fn, verbose=True):
     # TODO: collision_fn might not accept kwargs
     if collision_fn(start_conf, verbose=verbose):
-        print('Warning: initial configuration is in collision')
+        print(f'Warning: initial configuration {start_conf} is in collision')
         return False
     if collision_fn(end_conf, verbose=verbose):
-        print('Warning: end configuration is in collision')
+        print(f'Warning: end configuration {end_conf} is in collision')
         return False
     return True
 
@@ -5224,7 +5224,7 @@ def draw_pose(pose, length=0.1, d=3, label="", **kwargs):
         axis_world = tform_point(pose, length*axis)
         handles.append(add_line(origin_world, axis_world, color=axis, **kwargs))
     if label:
-        add_text(label, position=pose[0], color=BLACK, text_size=0.75, **kwargs)
+        handles.append(add_text(label, position=pose[0], color=BLACK, text_size=0.75, **kwargs))
     return handles
 
 def draw_global_system(length=1., **kwargs):

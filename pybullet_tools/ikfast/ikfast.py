@@ -6,6 +6,8 @@ import numpy as np
 import sys
 import os
 
+from loguru import logger
+
 PARENT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 sys.path.append(PARENT_DIR)
 
@@ -189,7 +191,7 @@ def closest_inverse_kinematics(robot, ikfast_info, tool_link, world_from_target,
     solutions = sorted(solutions, key=lambda q: get_length(difference_fn(q, current_conf), norm=norm))
     if verbose:
         min_distance = min([INF] + [get_length(difference_fn(q, current_conf), norm=norm) for q in solutions])
-        print('Identified {} IK solutions with minimum distance of {:.3f} in {:.3f} seconds'.format(
+        logger.debug('Identified {} IK solutions with minimum distance of {:.3f} in {:.3f} seconds'.format(
             len(solutions), min_distance, elapsed_time(start_time)))
     return iter(solutions)
 

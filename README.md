@@ -85,7 +85,7 @@ Heavily annotated simple example that demonstrates:
 
 ## Planning Examples
 
-* [Kuka IIWA pick motion planning](examples/test_kuka_pick.py) - `pybullet-planning$ python -m examples.test_kuka_pick`
+* [Kuka IIWA pick motion planning](examples/kuka_pick.py) - `pybullet-planning$ python -m examples.test_kuka_pick`
 * [TutleBot base motion planning](examples/test_turtlebot_motion.py) - ```pybullet-planning$ python -m examples.test_turtlebot_motion```
 * [PR2 base & arm motion planning](examples/test_pr2_motion.py) - ```pybullet-planning$ python -m examples.test_pr2_motion```
 * [Franka Panda workspace planning](examples/test_franka.py) - ```pybullet-planning$ python -m examples.test_franka```
