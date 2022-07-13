@@ -3559,17 +3559,29 @@ def get_closest_points(body1, body2, link1=None, link2=None, max_distance=MAX_DI
     # if ((link1 is not None) and not get_collision_data(body1, link1)) or \
     #         ((link2 is not None) and not get_collision_data(body2, link2)):
     #     return []
-    if (link1 is None) and (link2 is None):
-        results = p.getClosestPoints(bodyA=body1, bodyB=body2, distance=max_distance, physicsClientId=CLIENT)
-    elif link2 is None:
-        results = p.getClosestPoints(bodyA=body1, bodyB=body2, linkIndexA=link1,
-                                     distance=max_distance, physicsClientId=CLIENT)
-    elif link1 is None:
-        results = p.getClosestPoints(bodyA=body1, bodyB=body2, linkIndexB=link2,
-                                     distance=max_distance, physicsClientId=CLIENT)
-    else:
-        results = p.getClosestPoints(bodyA=body1, bodyB=body2, linkIndexA=link1, linkIndexB=link2,
-                                     distance=max_distance, physicsClientId=CLIENT)
+    results = None
+    num_attempts = 0
+
+    # For some reason pybullet fails sometimes and this fixes it
+    while results is None and num_attempts <= 50:
+        if (link1 is None) and (link2 is None):
+            results = p.getClosestPoints(bodyA=body1, bodyB=body2, distance=max_distance, physicsClientId=CLIENT)
+        elif link2 is None:
+            results = p.getClosestPoints(bodyA=body1, bodyB=body2, linkIndexA=link1,
+                                         distance=max_distance, physicsClientId=CLIENT)
+        elif link1 is None:
+            results = p.getClosestPoints(bodyA=body1, bodyB=body2, linkIndexB=link2,
+                                         distance=max_distance, physicsClientId=CLIENT)
+        else:
+            results = p.getClosestPoints(bodyA=body1, bodyB=body2, linkIndexA=link1, linkIndexB=link2,
+                                         distance=max_distance, physicsClientId=CLIENT)
+        num_attempts += 1
+        if results is None:
+            print(num_attempts, results)
+
+    if results is None:
+        raise RuntimeError("results is None!")
+
     return [CollisionInfo(*info) for info in results]
 
 def pairwise_link_collision(body1, link1, body2, link2=BASE_LINK, **kwargs):
