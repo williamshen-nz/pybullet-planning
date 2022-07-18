@@ -20,6 +20,8 @@ from collections import defaultdict, deque, namedtuple
 from contextlib import contextmanager
 from itertools import combinations, count, cycle, islice, product
 from multiprocessing import TimeoutError
+from numbers import Number
+from typing import Sequence, Optional
 
 import numpy as np
 import pybullet as p
@@ -2600,7 +2602,7 @@ def set_joint_state(body, joint, position, velocity):
     )
 
 
-def set_joint_position(body, joint, value):
+def set_joint_position(body: int, joint: int, value: Number) -> None:
     # TODO: remove targetVelocity=0
     p.resetJointState(
         body, joint, targetValue=value, targetVelocity=0, physicsClientId=CLIENT
@@ -2617,7 +2619,7 @@ def set_joint_states(body, joints, positions, velocities):
         set_joint_state(body, joint, position, velocity)
 
 
-def set_joint_positions(body, joints, values):
+def set_joint_positions(body: int, joints: Sequence[int], values: Sequence[Number]) -> None:
     for joint, value in safe_zip(joints, values):
         set_joint_position(body, joint, value)
 
@@ -2832,26 +2834,27 @@ def get_all_links(body):
     return [BASE_LINK] + list(get_links(body))
 
 
-def get_link_name(body, link):
+def get_link_name(body: int, link: int) -> str:
     if link == BASE_LINK:
         return get_base_name(body)
     return get_joint_info(body, link).linkName.decode("UTF-8")
 
 
-def get_link_names(body, links):
+def get_link_names(body: int, links: Sequence[int]) -> List[str]:
     return [get_link_name(body, link) for link in links]
 
 
-def get_link_parent(body, link):
+def get_link_parent(body: int, link: int) -> Optional[int]:
     if link == BASE_LINK:
         return None
     return get_joint_info(body, link).parentIndex
 
 
+# Note: link index and parent joint index are the same in pybullet
 parent_link_from_joint = get_link_parent
 
 
-def link_from_name(body, name):
+def link_from_name(body: int, name: str) -> int:
     if name == get_base_name(body):
         return BASE_LINK
     for link in get_joints(body):
@@ -2860,7 +2863,7 @@ def link_from_name(body, name):
     raise ValueError(body, name)
 
 
-def has_link(body, name):
+def has_link(body: int, name: str) -> bool:
     try:
         link_from_name(body, name)
     except ValueError:
