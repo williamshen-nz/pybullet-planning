@@ -54,7 +54,7 @@ def check_ik_solver(ikfast_info):
             # print("IKFast already imported")
             return
         import_ikfast(ikfast_info)
-        print('Using IKFast for inverse kinematics')
+        logger.info('Using IKFast for inverse kinematics')
     except ImportError as e:
         #traceback.print_exc()
         #print('\x1b[6;30;43m' + '{}, Using pybullet ik fn instead'.format(e) + '\x1b[0m')
@@ -62,10 +62,10 @@ def check_ik_solver(ikfast_info):
         module_name = get_module_name(ikfast_info)
         ik_path = os.path.join(PARENT_DIR, '/'.join(module_name.split('.')[:-1]))
         build_path = os.path.join(ik_path, SETUP_FILENAME)
-        print('Could not import IKFast module {}, please compile {} to use IKFast.'.format(
+        logger.critical('Could not import IKFast module {}, please compile {} to use IKFast.'.format(
             module_name, build_path))
-        print('$ (cd {}; ./{})'.format(ik_path, SETUP_FILENAME))
-        print('Using PyBullet for inverse kinematics')
+        logger.error('$ (cd {}; ./{})'.format(ik_path, SETUP_FILENAME))
+        logger.error('Using PyBullet for inverse kinematics')
         return True
     else:
         return False
